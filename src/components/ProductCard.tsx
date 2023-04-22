@@ -43,7 +43,7 @@ const ProductCard = ({ product }: { product: Product }) => {
     >
       <Box width={"100%"} height={"300px"} overflow={"hidden"}>
         <Image
-          src={product.imageSrc}
+          src={product.image}
           width={"100%"}
           height={"100%"}
           objectFit={"cover"}

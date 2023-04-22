@@ -1,6 +1,6 @@
 import { Box, ChakraProvider } from '@chakra-ui/react'
 import ProductList from './components/ProductList'
-import './styles/global.scss'
+
 import { extendTheme } from '@chakra-ui/react'
 import Nav from './components/Nav'
 import { useState } from 'react'

@@ -20,7 +20,7 @@ const Nav: React.FC<navProps> = ({ setSearchValue }) => {
   return (
     <>
       <chakra.nav
-        width={'full'}
+        width={'full'}  
         borderRadius={'10px'}
         minH={'50px'}
         alignItems={'center'}

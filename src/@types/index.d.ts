@@ -2,16 +2,9 @@ export interface Product {
   id: number
   name: string
   description: string
-  imageSrc: string
+  category?:Category
+  image: string
   price: number
-}
-
-export interface ProductStatusAction {
-  type: 'INCREMENT_QUANTITY' | 'DECREMENT_QUANTITY'
-  payload: {
-    product: Product
-    quantity?: number
-  }
 }
 
 export interface ProductStatus {

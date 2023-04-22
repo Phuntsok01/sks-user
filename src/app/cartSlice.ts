@@ -25,7 +25,7 @@ const cartSlice = createSlice({
         // add the product to the cart
         state.products.push({ product: action.payload.product, quantity: action.payload.quantity || 1, cost: action.payload.product.price * (action.payload.quantity || 1) });
       }
-      state.itemCount += 1;
+      state.itemCount += action.payload.quantity;
     },
     removeProduct: (state, action: {type: string, payload: {product: Product, quantity: number}}) => {
       // decrement the quantity of the product or remove if quantity is 1
