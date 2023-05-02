@@ -35,7 +35,7 @@ const ProductList: React.FC<productListProp> = ({ searchValue }) => {
       ]}
     >
       {isLoading && <Skeleton width={"200px"} />}
-      {data?.map((product) => (
+      {products?.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
     </Grid>

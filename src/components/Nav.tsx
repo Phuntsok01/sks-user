@@ -8,8 +8,10 @@ import {
 } from '@chakra-ui/react'
 import { AiOutlineShoppingCart } from 'react-icons/ai'
 import CartDrawer from './CartDrawer'
-import { useAppSelector } from '../app/store'
+import { useAppDispatch, useAppSelector } from '../app/store'
 import { selectCartItemsCount } from '../app/cartSlice'
+import { useLogoutMutation } from '../app/tableApiSlice'
+import { logoutSelf, selectTableDetail } from '../app/authSlice'
 type navProps = {
   setSearchValue: React.Dispatch<React.SetStateAction<string>>
 }
@@ -17,6 +19,18 @@ const Nav: React.FC<navProps> = ({ setSearchValue }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cartBtnRef = useRef<HTMLButtonElement>(null)
   const cartItemsCount = useAppSelector(selectCartItemsCount);
+  const dispatch = useAppDispatch();
+  const [logout, {isLoading}] = useLogoutMutation();
+    const tableDetail = useAppSelector(selectTableDetail);
+  const handleLogout = () => {
+    if (tableDetail?.tableNumber){
+      logout({tableNumber: tableDetail.tableNumber}).unwrap().then(() => {
+        dispatch(logoutSelf())
+      }).catch(err => {
+          console.log(err)
+        })
+    }
+  }
   return (
     <>
       <chakra.nav
@@ -77,6 +91,13 @@ const Nav: React.FC<navProps> = ({ setSearchValue }) => {
             {cartItemsCount}
           </chakra.span>
           <AiOutlineShoppingCart />
+        </Button>
+        <Button
+          colorScheme={'red'}
+          isLoading={isLoading}
+          onClick={handleLogout}
+        >
+          Logout
         </Button>
       </chakra.nav>
       <CartDrawer

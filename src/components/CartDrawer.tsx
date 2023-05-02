@@ -284,6 +284,20 @@ const CartDrawer = ({
                 )}
               </VStack>
             </Box>
+            <Button
+              marginTop={"30px"}
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"center"}
+              padding={["0.5rem 1rem", "1.5rem"]}
+              width={"100%"}
+              fontSize={"1.2rem"}
+              borderRadius={"6px"}
+              fontWeight={"bold"}
+              colorScheme={"whatsapp"}          
+            >
+              Place Order
+            </Button>
           </DrawerBody>
         </DrawerContent>
       </Drawer>

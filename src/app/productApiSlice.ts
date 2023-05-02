@@ -14,7 +14,10 @@ export const productApiSlice = apiSlice.injectEndpoints({
             query: ({id}) => `/product/${id}`,
             providesTags: ["Product"]
           }),
-    })
+          getProductByCategoryId: builder.query<Product[], {categoryId?: string}>({
+            query: ({categoryId}) => `/product?category=${categoryId}`,
+            providesTags: ["Product"]
+          }),    })
 })
 
-export const { useGetAllProductQuery, useGetProductByIdQuery}= productApiSlice
+export const { useGetAllProductQuery, useGetProductByIdQuery, useGetProductByCategoryIdQuery}= productApiSlice

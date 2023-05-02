@@ -14,6 +14,6 @@ import {
     baseQuery: baseQuery,
     reducerPath: "api",
     endpoints: () => ({}),
-    tagTypes: ["Product"],
+    tagTypes: ["Product", "Table","Category"],
   });
   
