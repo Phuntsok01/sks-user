@@ -1,34 +1,45 @@
-import { Box, Button, Heading, HStack, SimpleGrid, Skeleton } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  SimpleGrid,
+  Skeleton,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { useGetProductByCategoryIdQuery } from "../app/productApiSlice";
-import ProductCard from "./ProductCard";
+import { ProductCard } from "./ProductCard";
 
 const ProductByCategory = () => {
   const { id } = useParams();
-  const { data,isLoading } = useGetProductByCategoryIdQuery({ categoryId: id });
+  const { data, isLoading } = useGetProductByCategoryIdQuery({
+    categoryId: id,
+  });
   console.log(data);
   return (
-    <Box>
+    <Box p={"1.5rem"} backgroundColor={"gray.50"} minH={"100vh"}>
+      <Text fontWeight={600}>Welcome to SKS</Text>
+      <Heading>Products</Heading>
       {isLoading && (
-        <SimpleGrid columns={3} spacing={10}>
+        <VStack spacing={5}>
           <Skeleton height="250px" />
           <Skeleton height="250px" />
           <Skeleton height="250px" />
           <Skeleton height="250px" />
-        </SimpleGrid>
+        </VStack>
       )}
-      <SimpleGrid
-        columns={[1, 2, 2, 3, 4]}
-        spacing={10}
-        mt={"2rem"}
+      <VStack
+        justifyContent={"flex-start"}
+        spacing={"1rem"}
+        mt={"1rem"}
         placeItems={"flex-start"}
       >
         {data?.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
-      </SimpleGrid>
+      </VStack>
     </Box>
-  )
+  );
 };
 
 export default ProductByCategory;

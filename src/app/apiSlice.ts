@@ -5,6 +5,7 @@ import {
   
   const baseQuery = fetchBaseQuery({
     baseUrl: 'http://localhost:3001',
+    credentials: 'include',
     prepareHeaders: (headers) => {
       return headers;
     },
@@ -14,6 +15,6 @@ import {
     baseQuery: baseQuery,
     reducerPath: "api",
     endpoints: () => ({}),
-    tagTypes: ["Product", "Table","Category"],
+    tagTypes: ["Product", "Table","Category", "Order"],
   });
   

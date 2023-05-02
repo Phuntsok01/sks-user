@@ -12,6 +12,10 @@ const cartSlice = createSlice({
   name: "cart",
   initialState: initialState,
   reducers: {
+    clearCart: (state) => {
+      state.products = [];
+      state.itemCount = 0;
+    },
     addProduct: (state, action: {type: string, payload: {product: Product, quantity: number}}) => {
       // check if product already exists in cart
       const productIndex = state.products.findIndex(
@@ -48,7 +52,7 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addProduct, removeProduct } = cartSlice.actions;
+export const { addProduct, removeProduct, clearCart } = cartSlice.actions;
 export default cartSlice;
 export const selectCartState = (state: RootState) => state.cart;
 export const selectCartItems = (state: RootState) => state.cart.products;

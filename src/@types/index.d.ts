@@ -27,3 +27,10 @@ export type Category={
   name:string;
   image:string;
 }
+
+export interface OrderData{
+  id: number;
+  quantity: number;
+  product: Product;
+  table: Table;
+}

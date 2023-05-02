@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 import ProtectedRoute from "./components/layout/ProtectedLayout";
 
-import NavLayout from "./components/layout/NavLayout";
 import CategoryList from "./components/CategoryList";
-import ProductList from "./components/ProductList";
-import ProductCard from "./components/ProductCard";
-import ProductPage from "./components/ProductPage";
+
 import ProductByCategory from "./components/ProductByCategory";
+import MainLayout from "./components/layout/MainLayout";
+import ProductList from "./components/ProductList";
+import MyOrders from "./components/MyOrders";
 
 const router = createBrowserRouter([
   {
@@ -14,7 +14,7 @@ const router = createBrowserRouter([
     path: "/",
     children: [
       {
-        element: <NavLayout />,
+        element: <MainLayout />,
         path: "/",
         children: [
           {
@@ -23,11 +23,15 @@ const router = createBrowserRouter([
           },
           {
             path: "/product",
-            element: <ProductPage />,
+            element: <ProductList />,
           },
           {
             path: "category/:id",
             element: <ProductByCategory />,
+          },
+          {
+            path: "orders",
+            element: <MyOrders />,
           },
         ],
       },

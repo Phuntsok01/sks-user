@@ -8,80 +8,43 @@ import {
   Image,
   Button,
   useDisclosure,
+  AspectRatio,
+  Flex,
 } from "@chakra-ui/react";
 import { FC } from "react";
 import { BsEye, BsPencil, BsTrash } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { Category } from "../@types";
 
-const CategoryCard: FC<{ category: Category }> = ({ category }) => {
+
+export const CategoryCard1 = ({ category }: { category: Category }) => {
   return (
-    // <Box p={"2rem"} backgroundColor={"white"} borderRadius={"md"} boxShadow={"lg"}>
-    //   <Heading>{category.name}</Heading>
-    // </Box>
-    <Center py={12}>
-      <Box
-        role={"group"}
-        p={6}
-        maxW={"330px"}
-        w={"full"}
-        bg={useColorModeValue("white", "gray.800")}
-        boxShadow={"2xl"}
-        rounded={"lg"}
-        pos={"relative"}
-        zIndex={1}
+    <AspectRatio
+      ratio={1 / 1}
+      backgroundImage={`url(${category.image})`}
+      backgroundSize={"cover"}
+      borderRadius={"md"}
+      overflow={"hidden"}
+      as={Link}
+      to={`category/${category.id}`}
+    >
+      <Flex
+        height={"100%"}
+        flexDir={"column"}
+        alignItems={"flex-end !important"}
+        justifyContent={"flex-end !important"}
+        p={"0.5rem"}
+        pr={"0.8rem"}
+        background={`linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(0, 0, 0, 0.85) 100%
+          )`}
       >
-        <Box
-          position={"relative"}
-          rounded={"lg"}
-          mt={-12}
-          pos={"relative"}
-          height={"230px"}
-          _after={{
-            transition: "all .3s ease",
-            content: '""',
-            w: "full",
-            h: "full",
-            pos: "absolute",
-            top: 5,
-            left: 0,
-            backgroundImage: `url(${category.image})`,
-            filter: "blur(15px)",
-            zIndex: -1,
-          }}
-          _groupHover={{
-            _after: {
-              filter: "blur(20px)",
-            },
-          }}
-        >
-          <Image
-            rounded={"lg"}
-            height={230}
-            width={282}
-            objectFit={"cover"}
-            src={category.image}
-          />
-        </Box>
-        <Stack pt={10} align={"center"}>
-          <Text color={"gray.500"} fontSize={"sm"} textTransform={"uppercase"}>
-            Category Id: {category.id}
-          </Text>
-          <Heading fontSize={"2xl"} fontFamily={"body"} fontWeight={500}>
-            {category.name}
-          </Heading>
-          <Button
-            colorScheme="blue"
-            leftIcon={<BsEye />}
-            as={Link}
-            to={`/category/${category.id}`}
-          >
-            View
-          </Button>
-        </Stack>
-      </Box>
-    </Center>
+        <Heading size={"lg"} color={"white"}>
+          {category.name}
+        </Heading>
+      </Flex>
+    </AspectRatio>
   );
 };
-
-export default CategoryCard;

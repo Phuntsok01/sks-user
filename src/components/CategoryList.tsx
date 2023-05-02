@@ -1,17 +1,22 @@
-import { Box, Button, Heading, HStack, SimpleGrid, Skeleton } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import {
+  Box,
+  Text,
+  Heading,
+  SimpleGrid,
+} from "@chakra-ui/react";
 
-import CategoryCard from "./CategoryCard";
+import { CategoryCard1 } from "./CategoryCard";
 import { useGetAllCategoryQuery } from "../app/categoryApiSlice";
-
 
 const CategoryList = () => {
   const { data, isLoading } = useGetAllCategoryQuery(null);
   return (
-    <Box>
-      <SimpleGrid columns={3} spacing={10} mt={"1rem"}>
+    <Box p={"1.5rem"}>
+      <Text fontWeight={600}>Welcome to SKS</Text>
+      <Heading mb={"1rem"}>Choose Category</Heading>
+      <SimpleGrid columns={2} spacing={"1rem"}>
         {data?.map((category) => (
-          <CategoryCard key={category.id} category={category} />
+          <CategoryCard1 key={category.id} category={category} />
         ))}
       </SimpleGrid>
     </Box>

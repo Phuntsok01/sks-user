@@ -28,13 +28,24 @@ import { AnimatePresence, motion } from "framer-motion";
 import NoOfPeopleSelector from "./NoOfPeopleSelector";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../app/store";
-import { addProduct, removeProduct, selectCartItems } from "../app/cartSlice";
+import {
+  addProduct,
+  clearCart,
+  removeProduct,
+  selectCartItems,
+} from "../app/cartSlice";
+import { useRequestOrderMutation } from "../app/orderApiSlice";
 
 type CartDrawerProps = {
   isOpen: boolean;
   onClose: () => void;
   onOpen: () => void;
   cartBtnRef: React.RefObject<HTMLButtonElement>;
+};
+
+export type orderDto = {
+  product: number;
+  quantity: number;
 };
 
 const CartDrawer = ({
@@ -45,10 +56,7 @@ const CartDrawer = ({
 }: CartDrawerProps) => {
   const dispatch = useDispatch();
   const cartState = useAppSelector(selectCartItems);
-  const [discount, setDiscount] = useState(0);
-  const [tipAmount, setTipAmount] = useState(0);
   const [noOfPeople, setNoOfPeople] = useState(1);
-  const vatPercentage = 13;
   const totalCost = useMemo(() => {
     let cost = 0;
     cartState.forEach((prod) => {
@@ -57,18 +65,28 @@ const CartDrawer = ({
     return cost;
   }, [cartState]);
 
-  const vatAmount = useMemo(
-    () => parseFloat(((vatPercentage / 100) * totalCost).toFixed(2)),
-    [totalCost]
-  );
+  const [requestOrder, { isLoading }] = useRequestOrderMutation();
 
-  const grandTotal = useMemo(
-    () =>
-      parseFloat(
-        (totalCost + vatAmount - (discount || 0) + tipAmount).toFixed(3)
-      ),
-    [totalCost, discount, tipAmount]
-  );
+  const handleOrderRequest = () => {
+    console.log(cartState);
+    const orders: orderDto[] = [];
+    cartState.forEach((cartItem) => {
+      orders.push({
+        quantity: cartItem.quantity,
+        product: cartItem.product.id,
+      });
+    });
+    console.log(orders);
+    requestOrder(orders)
+      .unwrap()
+      .then((res) => {
+        console.log(res);
+        dispatch(clearCart());
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <Box width={"100%"}>
@@ -204,48 +222,10 @@ const CartDrawer = ({
                           exit={{ opacity: 0, x: -20 }}
                         >
                           <Tr>
-                            <Th>VAT</Th>
-                            <Th>{vatPercentage + " % of Rs." + totalCost}</Th>
-                            <Th>Rs. {vatAmount}</Th>
-                            <Th>Rs. {totalCost + vatAmount}</Th>
-                          </Tr>
-                          <Tr>
-                            <Th>Discount</Th>
-                            <Th>
-                              <Input
-                                value={discount}
-                                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                  setDiscount(parseFloat(e.target.value))
-                                }
-                                placeholder="Enter discount"
-                                _placeholder={{ fontSize: "0.8rem" }}
-                                type="number"
-                              />
-                            </Th>
-                            <Th></Th>
-                            <Th>Rs. {discount || 0}</Th>
-                          </Tr>
-                          <Tr>
-                            <Th>Tip Amount</Th>
-                            <Th>
-                              <Input
-                                value={tipAmount}
-                                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                  setTipAmount(parseFloat(e.target.value))
-                                }
-                                placeholder="Enter tip amount"
-                                _placeholder={{ fontSize: "0.8rem" }}
-                                type="number"
-                              />
-                            </Th>
-                            <Th></Th>
-                            <Th>Rs. {tipAmount || 0}</Th>
-                          </Tr>
-                          <Tr>
                             <Th>Grand Total</Th>
                             <Th></Th>
                             <Th></Th>
-                            <Th fontSize={"1rem"}>Rs. {grandTotal}</Th>
+                            <Th fontSize={"1rem"}>Rs. {totalCost}</Th>
                           </Tr>
                         </motion.tfoot>
                       )}
@@ -276,10 +256,7 @@ const CartDrawer = ({
                         }
                       />
                     </HStack>
-                    <BillSplit
-                      grandTotal={grandTotal}
-                      noOfPeople={noOfPeople}
-                    />
+                    <BillSplit grandTotal={totalCost} noOfPeople={noOfPeople} />
                   </VStack>
                 )}
               </VStack>
@@ -294,7 +271,10 @@ const CartDrawer = ({
               fontSize={"1.2rem"}
               borderRadius={"6px"}
               fontWeight={"bold"}
-              colorScheme={"whatsapp"}          
+              colorScheme={"whatsapp"}
+              isLoading={isLoading}
+              loadingText={"Placing your order request"}
+              onClick={handleOrderRequest}
             >
               Place Order
             </Button>

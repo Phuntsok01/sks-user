@@ -1,27 +1,22 @@
-import { ChangeEvent, useMemo, useState } from "react";
-import { Product } from "../@types";
-import { AiOutlineClose, AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import {
+  HStack,
+  IconButton,
+  VStack,
   chakra,
   Box,
-  Heading,
-  VStack,
-  HStack,
-  Button,
-  Divider,
   Image,
-  useDisclosure,
-  Input,
 } from "@chakra-ui/react";
+import { Additem, ArrowDown3, ArrowUp3, Box2 } from "iconsax-react";
+import { useMemo, useState } from "react";
+import { Product } from "../@types";
+import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/store";
 import { addProduct, removeProduct, selectCartState } from "../app/cartSlice";
 
-const ProductCard = ({ product }: { product: Product }) => {
-  const { isOpen, onToggle } = useDisclosure();
+const Updator = ({ product }: { product: Product }) => {
+  const [count, setCount] = useState(0);
   const dispatch = useAppDispatch();
   const cartState = useAppSelector(selectCartState);
-  const [amountToManipulate, setAmountToManipulate] = useState(1);
-
   const productStatus = useMemo(
     () =>
       cartState.products.find((prod) => prod.product.id === product.id) || {
@@ -31,159 +26,129 @@ const ProductCard = ({ product }: { product: Product }) => {
       },
     [cartState]
   );
-
-  return (
-    <VStack
-      borderRadius={"15px"}
-      alignItems={"baseline"}
-      width={"100%"}
-      overflow={"hidden"}
-      boxShadow={"0px 4px 15px rgba(71,71,71,0.26)"}
-      height={"500px"}
-    >
-      <Box width={"100%"} height={"300px"} overflow={"hidden"}>
-        <Image
-          src={product.image}
-          width={"100%"}
-          height={"100%"}
-          objectFit={"cover"}
-          alt={product.name}
+  if (productStatus.quantity === 0) {
+    return (
+      <VStack maxW={"80px"} height={"fit-content"}>
+        <IconButton
+          variant={"ghost"}
+          aria-label="Search"
+          color={"green"}
+          _focus={{ backgroundColor: "transparent" }}
+          icon={<Additem size="24" />}
+          transition="0.2s ease-out"
+          height={"fit-content"}
+          onClick={() => dispatch(addProduct({ product, quantity: 1 }))}
+          _active={{
+            transform: "translateY(-3px)",
+            textShadow: "1px 0px 10px rgba(0, 0, 0, 0.2)",
+          }}
         />
-      </Box>
-
-      <VStack
-        height={"100%"}
-        width={"100%"}
-        justifyContent={"space-between"}
-        padding={"1.4rem"}
-        pt={"0.25rem"}
-        alignItems={"baseline"}
-      >
-        <VStack width={"100%"} justifyContent={"space-between"}>
-          <VStack
-            width={"100%"}
-            zIndex={isOpen ? 3 : 0}
-            alignItems={"flex-start"}
-          >
-            <Heading fontSize={"xl"}>{product.name}</Heading>
-            <chakra.p maxW={"80%"}>{product.description}</chakra.p>
-          </VStack>
-          <HStack
-            width={"100%"}
-            alignItems={"center"}
-            my={"0.5rem"}
-            justifyContent={"flex-end"}
-          >
-            <HStack alignItems={"baseline"}>
-              <chakra.span
-                color={"green.600"}
-                fontWeight={"800"}
-                opacity={"0.7"}
-                className="currency"
-              >
-                Rs.{" "}
-              </chakra.span>
-              <chakra.span
-                color={"green.600"}
-                fontWeight={"800"}
-                fontSize={"2rem"}
-              >
-                {product.price}
-              </chakra.span>
-            </HStack>
-          </HStack>{" "}
-        </VStack>
-        {isOpen && (
-          <Button
-            position={"absolute"}
-            zIndex={4}
-            right={"1rem"}
-            top={"1rem"}
-            variant={"link"}
-            colorScheme={"blue"}
-            onClick={onToggle}
-          >
-            <AiOutlineClose color={"white"} />
-          </Button>
-        )}
-        <Divider my={"0.5rem"} />
-        <VStack width={"100%"} alignItems={"baseline"}>
-          <HStack
-            width={"100%"}
-            alignItems={"baseline"}
-            justifyContent={"space-between"}
-          >
-            <chakra.span opacity={0.8}>Quantity</chakra.span>
-            <chakra.span fontWeight={700} fontSize={"1.2rem"}>
-              {productStatus.quantity}
-            </chakra.span>
-          </HStack>
-
-          <HStack
-            width={"100%"}
-            alignItems={"baseline"}
-            justifyContent={"space-between"}
-          >
-            <chakra.span opacity={0.8}>Cost</chakra.span>
-            <chakra.span fontWeight={700} fontSize={"1.2rem"}>
-              {productStatus.cost}
-            </chakra.span>
-          </HStack>
-
-          <HStack
-            mt={"auto"}
-            width={"100%"}
-            justifyContent={"space-around"}
-            alignItems={"center"}
-            gap={"0.5rem"}
-          >
-            <Button
-              type={"button"}
-              colorScheme={"red"}
-              variant={"outline"}
-              width={"full"}
-              borderRadius={"30px"}
-              onClick={() =>
-                dispatch(
-                  removeProduct({ product, quantity: amountToManipulate || 1 })
-                )
-              }
-            >
-              <AiOutlineMinus size={"24"} />
-            </Button>
-            <Input
-              type={"number"}
-              variant={"flushed"}
-              value={amountToManipulate}
-              textAlign={"center"}
-              min={0}
-              onChange={(e: ChangeEvent) => {
-                if (e.target instanceof HTMLInputElement) {
-                  const newValue = parseInt(e.target.value);
-                  if (newValue) {
-                    setAmountToManipulate(Math.abs(newValue));
-                  } else {
-                    setAmountToManipulate(0);
-                  }
-                }
-              }}
-            />
-            <Button
-              colorScheme={"green"}
-              width={"full"}
-              borderRadius={"30px"}
-              onClick={() =>
-                dispatch(
-                  addProduct({ product, quantity: amountToManipulate || 1 })
-                )
-              }
-            >
-              <AiOutlinePlus size={"24"} />
-            </Button>
-          </HStack>
-        </VStack>
       </VStack>
+    );
+  }
+  return (
+    <VStack maxW={"80px"} height={"fit-content"}>
+      <IconButton
+        variant={"ghost"}
+        aria-label="Search"
+        color={"green"}
+        _focus={{ backgroundColor: "transparent" }}
+        icon={<ArrowUp3 size="24" />}
+        transition="0.2s ease-out"
+        height={"fit-content"}
+        _active={{
+          transform: "translateY(-3px)",
+          textShadow: "1px 0px 10px rgba(0, 0, 0, 0.2)",
+        }}
+        onClick={() => dispatch(addProduct({ product, quantity: 1 }))}
+      />
+      <chakra.span mt={"0 !important"}>{productStatus.quantity}</chakra.span>
+      <IconButton
+        variant={"ghost"}
+        aria-label="Search"
+        color={"red"}
+        mt={"0 !important"}
+        height={"fit-content"}
+        _focus={{ backgroundColor: "transparent" }}
+        icon={<ArrowDown3 size="24" />}
+        transition="0.2s ease-out"
+        _active={{
+          transform: "translateY(3px)",
+        }}
+        onClick={() => dispatch(removeProduct({ product, quantity: 1 }))}
+      />
     </VStack>
   );
 };
-export default ProductCard;
+
+export const ProductDetails = ({ product }: { product: Product }) => {
+  return (
+    <HStack
+      width={"full"}
+      align={"center"}
+      justify={"start"}
+      backgroundColor={"white"}
+      p={"1rem"}
+      borderRadius={"16px"}
+      gap={"6px"}
+      boxShadow={"0px 2px 15px rgba(0, 0, 0, 0.05)"}
+    >
+      <Box
+        height={"50px"}
+        width={"100%"}
+        maxW={"50px"}
+        borderRadius={"6px"}
+        overflow={"hidden"}
+      >
+        <Image
+          src={product.image}
+          alt={"Yomari"}
+          objectFit={"cover"}
+          width={"100%"}
+          height={"100%"}
+        />
+      </Box>
+      <VStack width={"100%"} align={"flex-start"}>
+        <HStack width={"full"} justify={"space-between"} align={"center"}>
+          <Link to={`/product/${product.id}`}>
+            <chakra.h1 fontSize={"md"} fontWeight={"bold"}>
+              {product.name}
+            </chakra.h1>
+          </Link>
+          <Box color={"green.500"}>
+            <Box2 size={"20px"} />
+          </Box>
+        </HStack>
+        <HStack w={"100%"}>
+          <chakra.p
+            marginTop={"-15px"}
+            lineHeight={"0.9rem"}
+            fontSize={"xs"}
+            w={"100%"}
+            noOfLines={1}
+          >
+            {product.description}
+          </chakra.p>
+          <chakra.span
+            w={"100%"}
+            maxW={"fit-content"}
+            fontWeight={"semibold"}
+            fontSize={"md"}
+            textAlign={"right"}
+          >
+            Rs. {product.price}
+          </chakra.span>
+        </HStack>
+      </VStack>
+    </HStack>
+  );
+};
+
+export const ProductCard = ({ product }: { product: Product }) => {
+  return (
+    <HStack width={"100%"} maxW={"800px"} alignItems={"center"}>
+      <ProductDetails product={product} />
+      <Updator product={product} />
+    </HStack>
+  );
+};
