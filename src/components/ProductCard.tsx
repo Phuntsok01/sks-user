@@ -14,7 +14,6 @@ import { useAppDispatch, useAppSelector } from "../app/store";
 import { addProduct, removeProduct, selectCartState } from "../app/cartSlice";
 
 const Updator = ({ product }: { product: Product }) => {
-  const [count, setCount] = useState(0);
   const dispatch = useAppDispatch();
   const cartState = useAppSelector(selectCartState);
   const productStatus = useMemo(
@@ -31,13 +30,14 @@ const Updator = ({ product }: { product: Product }) => {
       <VStack maxW={"80px"} height={"fit-content"}>
         <IconButton
           variant={"ghost"}
-          aria-label="Search"
+          aria-label={"add"}
           color={"green"}
           _focus={{ backgroundColor: "transparent" }}
           icon={<Additem size="24" />}
           transition="0.2s ease-out"
           height={"fit-content"}
           onClick={() => dispatch(addProduct({ product, quantity: 1 }))}
+          isDisabled={product.stock === 0}
           _active={{
             transform: "translateY(-3px)",
             textShadow: "1px 0px 10px rgba(0, 0, 0, 0.2)",
@@ -110,12 +110,10 @@ export const ProductDetails = ({ product }: { product: Product }) => {
       </Box>
       <VStack width={"100%"} align={"flex-start"}>
         <HStack width={"full"} justify={"space-between"} align={"center"}>
-          <Link to={`/product/${product.id}`}>
-            <chakra.h1 fontSize={"md"} fontWeight={"bold"}>
-              {product.name}
-            </chakra.h1>
-          </Link>
-          <Box color={"green.500"}>
+          <chakra.h1 fontSize={"md"} fontWeight={"bold"}>
+            {product.name}
+          </chakra.h1>
+          <Box color={product.isVeg ? "green.500" : "red.500"}>
             <Box2 size={"20px"} />
           </Box>
         </HStack>

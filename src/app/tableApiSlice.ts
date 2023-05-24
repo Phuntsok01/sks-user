@@ -16,14 +16,7 @@ export const tableApiSlice = apiSlice.injectEndpoints({
           method: "PATCH",
           body: {password}
       }),
-      invalidatesTags: ['Table']
-    }),
-    logout: builder.mutation<{message: string}, { tableNumber: number}>({
-      query: ({tableNumber}) => ({
-          url: `/table/${tableNumber}/logout`,
-          method: "POST",
-      }),
-      invalidatesTags: ['Table']
+      invalidatesTags: ['Table', 'Order']
     }),
 
     shareTable: builder.mutation<{message: string}, {password: string, tableNumber: number}>({
@@ -32,9 +25,17 @@ export const tableApiSlice = apiSlice.injectEndpoints({
           method: "POST",
           body: {password}
       }),
-      invalidatesTags: ['Table']    
+      invalidatesTags: ['Table', 'Order']    
     }),
+    logoutTable: builder.mutation({
+      query: () => ({
+          url: `/table/logout`,
+          method: "POST",
+      }),
+      invalidatesTags: ['Table', 'Order']
+    }),
+
   })
 })
 
-export const { useGetAllTableQuery, useLogoutMutation, useBookTableMutation, useShareTableMutation }= tableApiSlice
+export const { useGetAllTableQuery, useBookTableMutation, useShareTableMutation, useLogoutTableMutation }= tableApiSlice

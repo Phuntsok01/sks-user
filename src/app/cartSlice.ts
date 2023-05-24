@@ -23,13 +23,16 @@ const cartSlice = createSlice({
       );
       if (productIndex !== -1) {
         // increment the quantity of the product
-        state.products[productIndex].quantity += action.payload.quantity || 1;
-        state.products[productIndex].cost = state.products[productIndex].quantity * action.payload.product.price;
+        if (state.products[productIndex].product.stock > state.products[productIndex].quantity){
+          state.products[productIndex].quantity += action.payload.quantity || 1;
+          state.products[productIndex].cost = state.products[productIndex].quantity * action.payload.product.price;
+          state.itemCount += action.payload.quantity;
+        }
       } else {
         // add the product to the cart
         state.products.push({ product: action.payload.product, quantity: action.payload.quantity || 1, cost: action.payload.product.price * (action.payload.quantity || 1) });
+        state.itemCount += action.payload.quantity;
       }
-      state.itemCount += action.payload.quantity;
     },
     removeProduct: (state, action: {type: string, payload: {product: Product, quantity: number}}) => {
       // decrement the quantity of the product or remove if quantity is 1

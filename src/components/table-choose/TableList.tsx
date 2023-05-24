@@ -102,6 +102,7 @@ const AuthModalBox = ({
       tableNumber: table.tableNumber,
       password: createPassword,
     })
+      .unwrap()
       .then(() => {
         dispatch(setIsAuthenticated(true));
         dispatch(setTableDetails(table));
@@ -119,19 +120,21 @@ const AuthModalBox = ({
         toast({
           title: "Error",
           description: "Table Booking Failed",
-          status: "success",
+          status: "error",
           duration: 5000,
           isClosable: true,
           position: "top-right",
         });
       });
   };
+
   const handleTableShare = (data: formType) => {
     const { sharePassword } = data;
     shareTable({
       tableNumber: table.tableNumber,
       password: sharePassword,
     })
+      .unwrap()
       .then((res) => {
         console.log(res);
         dispatch(setIsAuthenticated(true));
@@ -150,7 +153,7 @@ const AuthModalBox = ({
         toast({
           title: "Error",
           description: "Table Sharing Failed",
-          status: "success",
+          status: "error",
           duration: 5000,
           isClosable: true,
           position: "top-right",
@@ -174,7 +177,7 @@ const AuthModalBox = ({
           >
             {table.status ? (
               <FormControl isRequired isInvalid={Boolean(errors.sharePassword)}>
-                <FormLabel>Enter New Password</FormLabel>
+                <FormLabel>Enter Password</FormLabel>
                 <Input
                   placeholder="Password"
                   {...register("sharePassword", {
@@ -191,7 +194,7 @@ const AuthModalBox = ({
                   isRequired
                   isInvalid={Boolean(errors.createPassword)}
                 >
-                  <FormLabel>Confirm New Password</FormLabel>
+                  <FormLabel>Enter New Password</FormLabel>
                   <Input
                     placeholder="Password"
                     {...register("createPassword", {
@@ -207,7 +210,7 @@ const AuthModalBox = ({
                   isRequired
                   isInvalid={Boolean(errors.confirmPassword)}
                 >
-                  <FormLabel>Enter Password</FormLabel>
+                  <FormLabel>Confirm New Password</FormLabel>
                   <Input
                     placeholder="Password"
                     {...register("confirmPassword", {

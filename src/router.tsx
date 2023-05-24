@@ -7,6 +7,7 @@ import ProductByCategory from "./components/ProductByCategory";
 import MainLayout from "./components/layout/MainLayout";
 import ProductList from "./components/ProductList";
 import MyOrders from "./components/MyOrders";
+import SearchProduct from "./components/SearchProduct";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
             path: "orders",
             element: <MyOrders />,
           },
+          {
+            path:"search",
+            element:<SearchProduct/>
+          }
         ],
       },
     ],

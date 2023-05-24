@@ -10,6 +10,8 @@ export interface Product {
   category?:Category
   image: string
   price: number
+  stock: number
+  isVeg: boolean
 }
 
 export interface ProductStatus {
@@ -33,4 +35,7 @@ export interface OrderData{
   quantity: number;
   product: Product;
   table: Table;
+  time?: number;
+  updatedAt?: string;
+  status: 'pending' | 'acknowledged' | 'confirmed' | 'completed'
 }

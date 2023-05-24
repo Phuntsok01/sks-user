@@ -20,6 +20,7 @@ import {
   Button,
   HStack,
   Input,
+  useToast,
 } from "@chakra-ui/react";
 import { ChangeEvent, useMemo, useState } from "react";
 import { AiOutlineDelete, AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
@@ -67,6 +68,7 @@ const CartDrawer = ({
 
   const [requestOrder, { isLoading }] = useRequestOrderMutation();
 
+  const toast = useToast();
   const handleOrderRequest = () => {
     console.log(cartState);
     const orders: orderDto[] = [];
@@ -81,10 +83,27 @@ const CartDrawer = ({
       .unwrap()
       .then((res) => {
         console.log(res);
+        toast({
+          title: "Sucess",
+          description: "Order Request Send Successfully",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "top-right",
+        });
+
         dispatch(clearCart());
       })
       .catch((err) => {
         console.log(err);
+        toast({
+          title: "Error",
+          description: "Order Request  Failed",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "top-right",
+        });
       });
   };
 

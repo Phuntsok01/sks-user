@@ -12,14 +12,38 @@ import { useAppDispatch, useAppSelector } from "../../app/store";
 import { selectCartItemsCount } from "../../app/cartSlice";
 import CartDrawer from "../CartDrawer";
 import { Footer } from "./Footer";
+import { logoutSelf } from "../../app/authSlice";
+import { useLogoutTableMutation } from "../../app/tableApiSlice";
 
 const MainLayout = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cartBtnRef = useRef<HTMLButtonElement>(null);
   const cartItemsCount = useAppSelector(selectCartItemsCount);
   const dispatch = useAppDispatch();
+  const [logout, { isLoading }] = useLogoutTableMutation();
+
+  const handleLogout = () => {
+    logout(null)
+      .unwrap()
+      .then(() => {
+        dispatch(logoutSelf());
+      })
+      .catch((e) => console.log(e));
+  };
+
   return (
     <Box position={"relative"}>
+      <Button
+        colorScheme="red"
+        variant={"outline"}
+        float={"right"}
+        m={"1rem"}
+        size={"sm"}
+        onClick={handleLogout}
+        isLoading={isLoading}
+      >
+        Logout
+      </Button>
       <Button
         position={"fixed"}
         bottom={"90px"}

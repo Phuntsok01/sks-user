@@ -19,7 +19,23 @@ export const tableApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Order']
     }),
+
+    
+    acceptOrder: builder.mutation<{message: string}, {id: number}>({
+      query: (data) => ({
+          url: `/order/${data.id}/accept  `,
+          method: "PATCH"
+      }),
+      invalidatesTags: ['Order']
+    }),
+    deleteOrder: builder.mutation<{message: string}, {id: number}>({
+      query: (data) => ({
+          url: `/order/${data.id}`,
+          method: "DELETE"
+      }),
+      invalidatesTags: ['Order']
+    }),
   })
 })
 
-export const { useGetMyOrdersQuery, useRequestOrderMutation }= tableApiSlice
+export const { useGetMyOrdersQuery, useRequestOrderMutation, useDeleteOrderMutation, useAcceptOrderMutation }= tableApiSlice

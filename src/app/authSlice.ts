@@ -46,7 +46,7 @@ const authSlice = createSlice({
     },
   },
 });
-
+ 
 export const { setIsAuthenticated,setTableDetails, logoutSelf } = authSlice.actions;
 export default authSlice;
 export const selectIsAuthenticated = (state: RootState) => state.auth.isAuthenticated;
